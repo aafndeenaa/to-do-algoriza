@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MyFormField extends StatelessWidget {
-  final String hint;
+  final String? hint;
   final String validaiton;
   final TextInputType keyBordType;
   final TextEditingController controller;
   final GestureTapCallback? onClick;
+
   const MyFormField({
     Key? key,
-    required this.hint,
+    this.hint,
     required this.controller,
     required this.validaiton,
     required this.keyBordType,
@@ -52,6 +53,23 @@ class MyFormField extends StatelessWidget {
           hintText: hint,
           hintStyle: const TextStyle(fontSize: 14, color: Colors.black),
         ),
+      ),
+    );
+  }
+}
+
+class HeadrTitle extends StatelessWidget {
+  String Headr;
+
+  HeadrTitle({Key? key, required this.Headr}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Text(
+        Headr,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
   }

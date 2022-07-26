@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class TaskItem extends StatefulWidget {
    const TaskItem({Key? key}) : super(key: key);
 
@@ -25,13 +27,10 @@ class _TaskItemState extends State<TaskItem> {
                 });
               }),
           const Expanded(child: Text('Design team meeting')),
-          IconButton(onPressed: (){},
-            icon: const Icon(Icons.archive),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(FontAwesomeIcons.heart),
           ),
-          IconButton(onPressed: (){},
-            icon: const Icon(Icons.send_and_archive_outlined),
-          )
-          
         ],
       ),
     );

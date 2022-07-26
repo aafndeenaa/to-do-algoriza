@@ -38,13 +38,13 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  AddTaskScreen()),
+                  MaterialPageRoute(builder: (context) => AddTaskScreen()),
                 );
               },
               child: const Text('Add a task'),
             ),
           ),
-        )
+        ),
       ],
     );
   }
