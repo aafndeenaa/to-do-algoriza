@@ -5,10 +5,10 @@ import 'package:note_app/task_item.dart';
 class AllTasksScreen extends StatefulWidget {
   AllTasksScreen({Key? key}) : super(key: key);
   List<TaskItem> tasks = [
-    TaskItem(),
-    TaskItem(),
-    TaskItem(),
-    TaskItem(),
+    const TaskItem(),
+    const TaskItem(),
+    const TaskItem(),
+    const TaskItem(),
   ];
 
   @override
