@@ -4,6 +4,8 @@ class CompletedTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.cyanAccent,);
+    return Container(
+      color: Colors.white,
+    );
   }
 }

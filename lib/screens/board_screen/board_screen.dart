@@ -4,6 +4,7 @@ import 'package:note_app/screens/all_task_screen/all_tasks_screen.dart';
 import 'package:note_app/screens/compelet_screen/completed_tasks_screen.dart';
 import 'package:note_app/screens/favorite_screen/favorites_screen.dart';
 import 'package:note_app/screens/un_compeleted_screen/uncompleted_tasks_screen.dart';
+import 'package:note_app/shared.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BoardScreen extends StatefulWidget {
@@ -96,20 +97,33 @@ class _BoardScreenState extends State<BoardScreen> {
         'error when create table ${error.toString()}';
       });
     }, onOpen: (database) {
+      GetDataFromDataBase(database).then((value) {
+        tasks = value;
+        debugPrint('tasks');
+      });
       debugPrint('table opend ');
     });
   }
 
-  void InsertDataBase() {
+  void InsertDataBase({
+    required String title,
+    required String date,
+    required String startTime,
+    required String endTime,
+  }) {
     database.transaction((txn) async {
       await txn
           .rawInsert(
-              'INSERT INTO tasks(title, date, startTime, endTime, remind, repeat) VALUES("first task","20","10","15","20","weakly")')
+              'INSERT INTO tasks(title, date, startTime, endTime, remind, repeat) VALUES("$title","$date","$startTime","$endTime","null","null")')
           .then((value) {
         debugPrint('$value isert done ');
       }).catchError((error) {
         'error when insert table ${error.toString()}';
       });
     });
+  }
+
+  Future<List<Map>> GetDataFromDataBase(database) async {
+    return await database.rawQuery('SELECT * FROM tasks');
   }
 }

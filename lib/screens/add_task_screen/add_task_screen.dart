@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/componanat.dart';
 
@@ -50,9 +49,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: formKey,
+      body: Form(
+        key: formKey,
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,154 +63,150 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               const SizedBox(
                 height: 14,
               ),
-              HeadrTitle(Headr: "Title"),
-              MyFormField(
-                hint: 'Werit Your Task Here',
-                controller: titleController,
-                validaiton: 'title must not be empty',
-                keyBordType: TextInputType.text,
+              HeadrTitle(
+                  headr: 'Title',
+                  fontwidth: FontWeight.bold,
+                  fontSize: 18,
+                  textColor: Colors.black),
+              const SizedBox(
+                height: 10,
               ),
-              HeadrTitle(Headr: "Date"),
-              Row(
-                children: [
-                  Expanded(
-                    child: MyFormField(
-                        onClick: () {},
-                        hint: DateFormat.yMMMEd().format(selectedDate),
-                        controller: dateController,
-                        validaiton: 'you must add date',
-                        keyBordType: TextInputType.datetime),
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        return await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: selectedDate,
-                          lastDate: DateTime.parse('2025-12-31'),
-                        ).then((value) {
-                          if (value == null) {
-                            setState(() {
-                              selectedDate = value!;
-                            });
-                          } else {
-                            return null;
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MyForm(
+                  type: TextInputType.text,
+                  controller: titleController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return '  Pleas add title ';
+                    }
+                  },
+                ),
+              ),
+              HeadrTitle(
+                  headr: "Date",
+                  textColor: Colors.black,
+                  fontSize: 18,
+                  fontwidth: FontWeight.bold),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  top: 8.0,
+                ),
+                child: MyForm(
+                  controller: dateController,
+                  type: TextInputType.datetime,
+                  radius: 10.0,
+                  onTap: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.parse('2025-08-31'),
+                    ).then((value) {
+                      dateController.text = DateFormat.yMMMd().format(value!);
+                      debugPrint(DateFormat.yMMMd().format(value));
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return '  Pleas add Date ';
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: HeadrTitle(
+                          headr: 'Start Time',
+                          fontwidth: FontWeight.bold,
+                          fontSize: 15,
+                          textColor: Colors.black),
+                    ),
+                    const SizedBox(
+                      width: 100,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: HeadrTitle(
+                          headr: 'End Time',
+                          fontwidth: FontWeight.bold,
+                          fontSize: 15,
+                          textColor: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: MyForm(
+                        controller: startTimeController,
+                        type: TextInputType.datetime,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter Your Start Date';
                           }
-                        });
-                      },
-                      icon: Icon(FontAwesomeIcons.calendar))
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HeadrTitle(Headr: "Start Time"),
-                      Container(
-                        width: 200,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: MyFormField(
-                                  onClick: () {},
-                                  hint: startTime,
-                                  controller: dateController,
-                                  validaiton: 'you must add date',
-                                  keyBordType: TextInputType.datetime),
-                            ),
-                            IconButton(
-                                onPressed: () async {
-                                  await showTimePicker(
-                                    context: context,
-                                    initialTime: isStartTime
-                                        ? TimeOfDay.fromDateTime(DateTime.now())
-                                        : TimeOfDay.fromDateTime(
-                                            DateTime.now()
-                                                .add(const Duration(hours: 1)),
-                                          ),
-                                    errorInvalidText: 'تنسيق خاطئ',
-                                    initialEntryMode: TimePickerEntryMode.input,
-                                  ).then((value) {
-                                    if (value != null) {
-                                      String formatted =
-                                          value.format(context).toString();
-                                      isStartTime
-                                          ? startTime = formatted
-                                          : endTime = formatted;
-                                      setState(() {});
-                                    } else {
-                                      return;
-                                    }
-                                  });
-                                },
-                                icon: Icon(FontAwesomeIcons.stopwatch))
-                          ],
-                        ),
+                          return null;
+                        },
+                        radius: 10.0,
+                        suffix: Icons.watch_later_outlined,
+                        onTap: () {
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          ).then((value) {
+                            startTimeController.text = value!.format(context);
+                            debugPrint(value.format(context));
+                          });
+                        },
                       ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HeadrTitle(Headr: "End Time"),
-                      Container(
-                        width: 180,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: MyFormField(
-                                  hint: endTime,
-                                  controller: endTimeController,
-                                  validaiton: 'you must add end date',
-                                  keyBordType: TextInputType.datetime),
-                            ),
-                            IconButton(
-                                onPressed: () async {
-                                  await showTimePicker(
-                                    context: context,
-                                    initialTime: isStartTime
-                                        ? TimeOfDay.fromDateTime(DateTime.now())
-                                        : TimeOfDay.fromDateTime(
-                                            DateTime.now()
-                                                .add(const Duration(hours: 1)),
-                                          ),
-                                    errorInvalidText: 'تنسيق خاطئ',
-                                    initialEntryMode: TimePickerEntryMode.input,
-                                  ).then((value) {
-                                    if (value != null) {
-                                      String formatted =
-                                          value.format(context).toString();
-                                      isStartTime
-                                          ? startTime = formatted
-                                          : endTime = formatted;
-                                      setState(() {});
-                                    } else {
-                                      return;
-                                    }
-                                  });
-                                },
-                                icon: Icon(FontAwesomeIcons.stopwatch))
-                          ],
-                        ),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      child: MyForm(
+                        controller: endTimeController,
+                        type: TextInputType.datetime,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please Enter Your End date';
+                          }
+                          return null;
+                        },
+                        radius: 10.0,
+                        suffix: Icons.watch_later_outlined,
+                        onTap: () {
+                          showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          ).then((value) {
+                            endTimeController.text = value!.format(context);
+                            debugPrint(value.format(context));
+                          });
+                        },
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-              HeadrTitle(Headr: 'Remind'),
-              MyFormField(
-                  onClick: () {},
-                  controller: remindController,
-                  validaiton: 'you must add remindr',
-                  keyBordType: TextInputType.datetime),
-              HeadrTitle(Headr: 'Repeat'),
-              MyFormField(
-                  onClick: () {},
-                  controller: repeatController,
-                  validaiton: 'you must add repeat',
-                  keyBordType: TextInputType.datetime),
+              const SizedBox(
+                height: 260,
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 15, right: 15, bottom: 30, top: 8),
@@ -221,8 +216,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       borderRadius: BorderRadius.circular(10)),
                   width: double.infinity,
                   child: MaterialButton(
-                    onPressed: () {},
-                    child: const Text('Add a task'),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {}
+                    },
+                    child: const Text('Creat a task'),
                   ),
                 ),
               ),
