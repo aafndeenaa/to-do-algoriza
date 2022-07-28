@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/widgets.dart';
+
 class MyFormField extends StatelessWidget {
   final String? hint;
   final String validaiton;
   final TextInputType keyBordType;
   final TextEditingController controller;
-  final GestureTapCallback? onClick;
+  final Function()? onClick;
 
   const MyFormField({
     Key? key,
@@ -15,6 +17,7 @@ class MyFormField extends StatelessWidget {
     required this.keyBordType,
     this.onClick,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
