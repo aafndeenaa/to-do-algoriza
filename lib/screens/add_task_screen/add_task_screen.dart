@@ -1,5 +1,5 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/componanat.dart';
 
@@ -24,6 +24,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   var remindController = TextEditingController();
 
   var repeatController = TextEditingController();
+
+  var selectedDate = DateTime.now();
+  late bool isStartTime;
+  String startTime = DateFormat('hh:mm a').format(DateTime.now());
+  String endTime = DateFormat('hh:mm a').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -67,20 +72,36 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 keyBordType: TextInputType.text,
               ),
               HeadrTitle(Headr: "Date"),
-              MyFormField(
-                  onClick: () {
-                    DateTimePicker(
-                      type: DateTimePickerType.dateTime,
-                      dateMask: 'd MMM, yyyy',
-                      controller: dateController,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.parse('2025-12-30'),
-                    );
-                  },
-                  controller: dateController,
-                  validaiton: 'you must add date',
-                  keyBordType: TextInputType.datetime),
+              Row(
+                children: [
+                  Expanded(
+                    child: MyFormField(
+                        onClick: () {},
+                        hint: DateFormat.yMMMEd().format(selectedDate),
+                        controller: dateController,
+                        validaiton: 'you must add date',
+                        keyBordType: TextInputType.datetime),
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        return await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: selectedDate,
+                          lastDate: DateTime.parse('2025-12-31'),
+                        ).then((value) {
+                          if (value == null) {
+                            setState(() {
+                              selectedDate = value!;
+                            });
+                          } else {
+                            return null;
+                          }
+                        });
+                      },
+                      icon: Icon(FontAwesomeIcons.calendar))
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -89,20 +110,45 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     children: [
                       HeadrTitle(Headr: "Start Time"),
                       Container(
-                        width: 180,
-                        child: MyFormField(
-                            onClick: () {
-                              showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ).then((value) {
-                                startTimeController.text =
-                                    value!.format(context).toString();
-                              });
-                            },
-                            controller: startTimeController,
-                            validaiton: 'you must add Start Time ',
-                            keyBordType: TextInputType.datetime),
+                        width: 200,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: MyFormField(
+                                  onClick: () {},
+                                  hint: startTime,
+                                  controller: dateController,
+                                  validaiton: 'you must add date',
+                                  keyBordType: TextInputType.datetime),
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime: isStartTime
+                                        ? TimeOfDay.fromDateTime(DateTime.now())
+                                        : TimeOfDay.fromDateTime(
+                                            DateTime.now()
+                                                .add(const Duration(hours: 1)),
+                                          ),
+                                    errorInvalidText: 'تنسيق خاطئ',
+                                    initialEntryMode: TimePickerEntryMode.input,
+                                  ).then((value) {
+                                    if (value != null) {
+                                      String formatted =
+                                          value.format(context).toString();
+                                      isStartTime
+                                          ? startTime = formatted
+                                          : endTime = formatted;
+                                      setState(() {});
+                                    } else {
+                                      return;
+                                    }
+                                  });
+                                },
+                                icon: Icon(FontAwesomeIcons.stopwatch))
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -112,19 +158,43 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       HeadrTitle(Headr: "End Time"),
                       Container(
                         width: 180,
-                        child: MyFormField(
-                            onClick: () {
-                              showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ).then((value) {
-                                endTimeController.text =
-                                    value!.format(context).toString();
-                              });
-                            },
-                            controller: endTimeController,
-                            validaiton: 'you must add end date',
-                            keyBordType: TextInputType.datetime),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: MyFormField(
+                                  hint: endTime,
+                                  controller: endTimeController,
+                                  validaiton: 'you must add end date',
+                                  keyBordType: TextInputType.datetime),
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime: isStartTime
+                                        ? TimeOfDay.fromDateTime(DateTime.now())
+                                        : TimeOfDay.fromDateTime(
+                                            DateTime.now()
+                                                .add(const Duration(hours: 1)),
+                                          ),
+                                    errorInvalidText: 'تنسيق خاطئ',
+                                    initialEntryMode: TimePickerEntryMode.input,
+                                  ).then((value) {
+                                    if (value != null) {
+                                      String formatted =
+                                          value.format(context).toString();
+                                      isStartTime
+                                          ? startTime = formatted
+                                          : endTime = formatted;
+                                      setState(() {});
+                                    } else {
+                                      return;
+                                    }
+                                  });
+                                },
+                                icon: Icon(FontAwesomeIcons.stopwatch))
+                          ],
+                        ),
                       ),
                     ],
                   ),
