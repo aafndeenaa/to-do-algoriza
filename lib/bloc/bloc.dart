@@ -11,8 +11,6 @@ class TodoBloc extends Cubit<TodoStates> {
 
   static TodoBloc get(context) => BlocProvider.of<TodoBloc>(context);
   late Database database;
-  var isChecked = false;
-
   void CreateDataBase() async {
     database = await openDatabase('note.db', version: 1,
         onCreate: (database, version) {
