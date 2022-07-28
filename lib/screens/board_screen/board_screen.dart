@@ -4,8 +4,6 @@ import 'package:note_app/screens/all_task_screen/all_tasks_screen.dart';
 import 'package:note_app/screens/compelet_screen/completed_tasks_screen.dart';
 import 'package:note_app/screens/favorite_screen/favorites_screen.dart';
 import 'package:note_app/screens/un_compeleted_screen/uncompleted_tasks_screen.dart';
-import 'package:note_app/shared.dart';
-import 'package:sqflite/sqflite.dart';
 
 class BoardScreen extends StatefulWidget {
   const BoardScreen({Key? key}) : super(key: key);
@@ -15,13 +13,7 @@ class BoardScreen extends StatefulWidget {
 }
 
 class _BoardScreenState extends State<BoardScreen> {
-  late Database database;
-
   @override
-  void initState() {
-    super.initState();
-    CreateDataBase();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,46 +76,5 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
-  void CreateDataBase() async {
-    database = await openDatabase('note.db', version: 1,
-        onCreate: (database, version) {
-      debugPrint('db creted');
-      database
-          .execute(
-              'CREATE TABLE tasks(ID INTEGER PRIMARY KEY, title TEXT, date TEXT, startTime TEXT, endTime TEXT, remind INTEGER, repeat TEXT)')
-          .then((value) {
-        debugPrint('table created');
-      }).catchError((error) {
-        'error when create table ${error.toString()}';
-      });
-    }, onOpen: (database) {
-      GetDataFromDataBase(database).then((value) {
-        tasks = value;
-        debugPrint('tasks');
-      });
-      debugPrint('table opend ');
-    });
-  }
 
-  void InsertDataBase({
-    required String title,
-    required String date,
-    required String startTime,
-    required String endTime,
-  }) {
-    database.transaction((txn) async {
-      await txn
-          .rawInsert(
-              'INSERT INTO tasks(title, date, startTime, endTime, remind, repeat) VALUES("$title","$date","$startTime","$endTime","null","null")')
-          .then((value) {
-        debugPrint('$value isert done ');
-      }).catchError((error) {
-        'error when insert table ${error.toString()}';
-      });
-    });
-  }
-
-  Future<List<Map>> GetDataFromDataBase(database) async {
-    return await database.rawQuery('SELECT * FROM tasks');
-  }
 }
